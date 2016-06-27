@@ -1,0 +1,40 @@
+plugins {
+    id "com.github.hierynomus.license" version "0.12.1"
+}
+
+defaultTasks 'build'
+
+apply plugin: "com.github.hierynomus.license"
+apply plugin: 'java'
+apply plugin: 'idea'
+apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+group = 'com.xebialabs.deployit.community'
+sourceCompatibility = 1.6
+targetCompatibility = 1.6
+version = '1.0.0'
+
+repositories {
+	mavenLocal()
+	mavenCentral()
+}
+
+dependencies {
+}
+
+import org.apache.tools.ant.filters.*
+ 
+processResources {
+    filter ReplaceTokens, tokens: [
+        "project.version": project.property("version"),
+        "project.artifactId": project.property("name")
+    ]
+}
+
+license {
+    header rootProject.file('src/main/license/xebialabs_community.license')
+    strictCheck true
+}
+
+

@@ -1,0 +1,48 @@
+<!--
+
+    THIS CODE AND INFORMATION ARE PROVIDED "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR
+    IMPLIED, INCLUDING BUT NOT LIMITED TO THE IMPLIED WARRANTIES OF MERCHANTABILITY AND/OR FITNESS
+    FOR A PARTICULAR PURPOSE. THIS CODE AND INFORMATION ARE NOT SUPPORTED BY XEBIALABS.
+
+-->
+<synthetic xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+           xmlns="http://www.xebialabs.com/deployit/synthetic"
+           xsi:schemaLocation="http://www.xebialabs.com/deployit/synthetic synthetic.xsd">
+
+	<type type="keystore.Entry" extends="generic.ExecutedScript" virtual="true">
+		<generate-deployable type="keystore.EntrySpec" extends="generic.Resource"/>
+		<property name="destroyScript" kind="string" default="keystore/remove-entry" hidden="true" />
+    <property name="destroyOptions" kind="set_of_string" hidden="true" default="uploadArtifactData"/>
+		<property name="createVerb"  default="Add" hidden="true"/>
+		<property name="destroyVerb" default="Remove" hidden="true"/>
+
+    <property name="alias" description="The alias of the entry in the Keystore" required="true"/>
+    <property name="certificate" label="Certificate (base64 encoded)" description="The certificate (DER base64 encoded)" size="large" required="false"/>
+	</type>
+
+	<type type="keystore.PrivateKeyEntry" extends="keystore.Entry" deployable-type="keystore.PrivateKey" container-type="keystore.KeyStore">
+    <generate-deployable type="keystore.PrivateKey" extends="keystore.EntrySpec"/>
+		<property name="createScript" default="keystore/add-private-key-entry" hidden="true"/>
+		<property name="classpathResources" kind="set_of_string" hidden="true" default="ext/deployit/community/plugin/keystore/util/KeyImporter.class"/>
+		<property name="templateClasspathResources" kind="set_of_string" hidden="true" default="keystore/key.b64,keystore/certificate-chain.b64"/>
+
+		<property name="certificate" label="Certificate (base64 encoded)" description="The certificate or complete chain in PKCS#7 (base64 encoded)" size="large" required="true"/>
+    <property name="key" label="Key (base64 encoded PKCS#8)" description="The key associated with the certificate (base64 encoded form of a PKCS#8 DER key)" password="true" size="large" required="true"/>
+    <property name="keyAlgorithm" description="The key algorithm of the private key" default="RSA"/>
+    <property name="keyPassword" description="Password of the private key" password="true" required="true"/>
+	</type>
+
+	<type type="keystore.TrustedCertificateEntry" extends="keystore.Entry" deployable-type="keystore.TrustedCertificate" container-type="keystore.KeyStore">
+        <generate-deployable type="keystore.TrustedCertificate" extends="keystore.EntrySpec" />
+        <property name="createScript" default="keystore/add-trusted-certificate-entry" hidden="true"/>
+        <property name="templateClasspathResources" kind="set_of_string" hidden="true" default="keystore/certificate.pem"/>
+	</type>
+
+	<type type="keystore.KeyStore" extends="generic.Container">
+		<property name="jvmPath" label="Path of the JVM (JAVA_HOME)" required="true"/>
+		<property name="keystore" label="Path and filename of the keystore" required="true" />
+    <property name="keystoreType" label="Type of the keystore" required="true" default="JKS" />
+    <property name="passphrase" label="Keystore's passphrase" password="true"/>
+	</type>
+
+</synthetic>
